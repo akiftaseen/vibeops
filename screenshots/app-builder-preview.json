@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Proofed",
+      "hasCanvas": false,
+      "bodyTextLen": 4041,
+      "bodyTextHash": "53d6b79e4333e7a0ab7fc0b658d9c8a5189317f92a23fd81526c609df7bcec97",
+      "bodyTextPrefix": "Proofed Sample report Checklist Pricing Open workspace Run a Lau",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Proofed",
+      "hasCanvas": false,
+      "bodyTextLen": 4009,
+      "bodyTextHash": "81a49b722d8fad8e207845c44eef9a806762a60cbe44a3d9ed060e19641b6aa0",
+      "bodyTextPrefix": "Proofed Open workspace Run a Launch Check LAUNCH VERIFICATION · ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}

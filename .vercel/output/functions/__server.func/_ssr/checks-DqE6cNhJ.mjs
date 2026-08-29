@@ -1,0 +1,463 @@
+//#region node_modules/.nitro/vite/services/ssr/assets/checks-DqE6cNhJ.js
+var DIMENSION_LABELS = {
+	security: "Security",
+	auth: "Authentication and authorization",
+	data: "Data safety",
+	payments: "Payments",
+	reliability: "Reliability",
+	runtime: "Runtime and UX",
+	accessibility: "Accessibility",
+	operations: "Operations"
+};
+var GATE_COPY = {
+	blocked: {
+		label: "Blocked",
+		sentence: "At least one applicable blocking rule failed with confirmed or high-confidence evidence."
+	},
+	at_risk: {
+		label: "At risk",
+		sentence: "No hard blocker was proven, but important failures, low coverage, or unresolved run errors remain."
+	},
+	ready_with_exceptions: {
+		label: "Ready with exceptions",
+		sentence: "All blocking rules passed; explicit, time-bounded exceptions remain."
+	},
+	ready_for_tested_scope: {
+		label: "Ready for tested scope",
+		sentence: "All blocking rules passed and minimum coverage was reached for the declared launch scope. This is not a claim of complete security."
+	},
+	insufficient_evidence: {
+		label: "Insufficient evidence",
+		sentence: "The run did not execute enough applicable checks to support a readiness judgment."
+	}
+};
+var PHASE_LABELS = {
+	queued: "Queued",
+	acquiring: "Snapshot",
+	inventorying: "Inventory",
+	analyzing: "Static analysis",
+	building: "Install and build",
+	starting: "Local runtime",
+	testing: "Dynamic and browser",
+	validating: "Evidence validation",
+	scoring: "Policy",
+	completed: "Completed",
+	cancelled: "Cancelled",
+	timed_out: "Timed out",
+	failed_infrastructure: "Platform failure",
+	failed_configuration: "Configuration failure",
+	unsupported: "Unsupported"
+};
+var CHECKS = [
+	{
+		id: "BUILD-001",
+		version: "1.0.0",
+		title: "Reproducible dependency install",
+		category: "security",
+		priority: "P0",
+		defaultSeverity: "high",
+		blockingEligible: true,
+		weight: 5,
+		method: "Detect one lockfile, run frozen install in a clean sandbox, record command and exit.",
+		standards: ["NIST-SSDF-PW.4"]
+	},
+	{
+		id: "BUILD-002",
+		version: "1.0.0",
+		title: "Production build succeeds",
+		category: "reliability",
+		priority: "P0",
+		defaultSeverity: "high",
+		blockingEligible: true,
+		weight: 5,
+		method: "Execute declared production build with synthetic placeholders; preserve redacted log and exit code.",
+		standards: ["NIST-SSDF-PW.8"]
+	},
+	{
+		id: "BUILD-003",
+		version: "1.0.0",
+		title: "TypeScript check succeeds",
+		category: "reliability",
+		priority: "P0",
+		defaultSeverity: "medium",
+		blockingEligible: false,
+		weight: 2,
+		method: "Run repository script or tsc --noEmit when compatible.",
+		standards: ["NIST-SSDF-PW.7"]
+	},
+	{
+		id: "CONFIG-001",
+		version: "1.0.0",
+		title: "Required environment variables are declared and scoped",
+		category: "security",
+		priority: "P0",
+		defaultSeverity: "high",
+		blockingEligible: true,
+		weight: 5,
+		method: "Compare code references, validation schema, example env, and supplied preview configuration. Never display values.",
+		standards: ["OWASP-ASVS-1.5.2"]
+	},
+	{
+		id: "SECRET-001",
+		version: "1.0.0",
+		title: "No tracked or historical high-confidence secret",
+		category: "security",
+		priority: "P0",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Gitleaks-compatible history and working-tree scan; fingerprint, path, commit, provider pattern, and redacted match.",
+		standards: ["OWASP-ASVS-2.6.3"]
+	},
+	{
+		id: "SECRET-002",
+		version: "1.0.0",
+		title: "No secret or privileged key in client bundle",
+		category: "security",
+		priority: "P0",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Inspect compiled browser assets and source maps for privileged patterns and known secret env sources.",
+		standards: ["OWASP-ASVS-2.6.3", "OWASP-API-2"]
+	},
+	{
+		id: "DEP-001",
+		version: "1.0.0",
+		title: "No applicable critical known vulnerability in production dependency",
+		category: "security",
+		priority: "P0",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "OSV-Scanner against lockfile; filter dev-only packages; use import/reachability evidence when available.",
+		standards: ["NIST-SSDF-PW.4"]
+	},
+	{
+		id: "AUTHZ-001",
+		version: "1.0.0",
+		title: "Sensitive server route rejects anonymous access",
+		category: "auth",
+		priority: "P0",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Identify sensitive route and show anonymous request response or statically proven guard.",
+		standards: ["OWASP-ASVS-4.1.1", "OWASP-API-1"]
+	},
+	{
+		id: "AUTHZ-002",
+		version: "1.0.0",
+		title: "Object-level authorization isolates users",
+		category: "auth",
+		priority: "P0",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "With two synthetic personas, create/read/update object A as user A and replay as user B.",
+		standards: ["OWASP-ASVS-4.2.1", "OWASP-API-1"]
+	},
+	{
+		id: "AUTHZ-003",
+		version: "1.0.0",
+		title: "Ordinary user cannot invoke admin function",
+		category: "auth",
+		priority: "P0",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Exercise candidate admin route/action with ordinary persona and compare to admin persona.",
+		standards: ["OWASP-ASVS-4.1.2", "OWASP-API-5"]
+	},
+	{
+		id: "AUTH-001",
+		version: "1.0.0",
+		title: "Session cookie and logout semantics are safe",
+		category: "auth",
+		priority: "P1",
+		defaultSeverity: "high",
+		blockingEligible: true,
+		weight: 5,
+		method: "Inspect Secure, HttpOnly, SameSite, expiry, token storage, and logout invalidation.",
+		standards: ["OWASP-ASVS-3.4.1"]
+	},
+	{
+		id: "AUTH-002",
+		version: "1.0.0",
+		title: "Password reset/login abuse has bounded controls",
+		category: "auth",
+		priority: "P1",
+		defaultSeverity: "high",
+		blockingEligible: false,
+		weight: 5,
+		method: "Static detection plus a low-volume test within a strict request budget; no brute force.",
+		standards: ["OWASP-ASVS-2.2.1"]
+	},
+	{
+		id: "API-001",
+		version: "1.0.0",
+		title: "Credentialed CORS is not broadly permissive",
+		category: "security",
+		priority: "P0",
+		defaultSeverity: "high",
+		blockingEligible: true,
+		weight: 5,
+		method: "Inspect response headers/config and send bounded preflight requests from an untrusted origin.",
+		standards: ["OWASP-ASVS-14.5.3"]
+	},
+	{
+		id: "API-002",
+		version: "1.0.0",
+		title: "Redirect and callback destinations are allowlisted",
+		category: "security",
+		priority: "P1",
+		defaultSeverity: "high",
+		blockingEligible: true,
+		weight: 5,
+		method: "Trace user-controlled redirect inputs and test an external destination with a non-authenticated fixture.",
+		standards: ["OWASP-ASVS-4.3.1"]
+	},
+	{
+		id: "API-003",
+		version: "1.0.0",
+		title: "Untrusted input does not reach dangerous query/command sink",
+		category: "security",
+		priority: "P1",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Semgrep/AST taint candidate plus targeted request where safe.",
+		standards: ["OWASP-ASVS-5.3.4"]
+	},
+	{
+		id: "API-004",
+		version: "1.0.0",
+		title: "Server-side URL fetch blocks internal destinations",
+		category: "security",
+		priority: "P1",
+		defaultSeverity: "high",
+		blockingEligible: true,
+		weight: 5,
+		method: "Trace URL inputs; test only reserved/non-routable and sandbox-owned targets.",
+		standards: ["OWASP-ASVS-12.6.1"]
+	},
+	{
+		id: "UPLOAD-001",
+		version: "1.0.0",
+		title: "Uploads enforce authorization, size, type, and safe names",
+		category: "security",
+		priority: "P1",
+		defaultSeverity: "high",
+		blockingEligible: true,
+		weight: 5,
+		method: "Inspect handler/storage policy and submit inert boundary fixtures. No malware payloads.",
+		standards: ["OWASP-ASVS-12.4.1"]
+	},
+	{
+		id: "SUPA-001",
+		version: "1.0.0",
+		title: "Service-role/secret key is server-only",
+		category: "data",
+		priority: "P0",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Trace client construction and env sources; inspect emitted bundle. Service-role access bypasses RLS.",
+		standards: ["OWASP-ASVS-2.6.3"]
+	},
+	{
+		id: "SUPA-002",
+		version: "1.0.0",
+		title: "RLS is enabled on exposed user-data tables",
+		category: "data",
+		priority: "P0",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Parse migrations/schema; compare grants and RLS declarations for tables reached by clients.",
+		standards: ["OWASP-ASVS-4.2.2"]
+	},
+	{
+		id: "SUPA-003",
+		version: "1.0.0",
+		title: "RLS policy enforces tenant/user boundary",
+		category: "data",
+		priority: "P0",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Analyze USING/WITH CHECK, role grants, and auth identity predicates; confirm with two-persona test when possible.",
+		standards: ["OWASP-ASVS-4.2.1", "OWASP-API-1"]
+	},
+	{
+		id: "SUPA-004",
+		version: "1.0.0",
+		title: "Storage bucket and object policies match declared privacy",
+		category: "data",
+		priority: "P1",
+		defaultSeverity: "high",
+		blockingEligible: true,
+		weight: 5,
+		method: "Parse storage migrations/policies and exercise inert object access in a disposable project.",
+		standards: ["OWASP-ASVS-4.2.2"]
+	},
+	{
+		id: "DATA-001",
+		version: "1.0.0",
+		title: "Migration has no unguarded destructive operation",
+		category: "data",
+		priority: "P0",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Parse SQL for drops, truncation, destructive type changes, unbounded delete/update, and unsafe constraint changes.",
+		standards: ["NIST-SSDF-PW.8"]
+	},
+	{
+		id: "DATA-002",
+		version: "1.0.0",
+		title: "Migration applies to a populated fixture and is repeatable",
+		category: "data",
+		priority: "P1",
+		defaultSeverity: "high",
+		blockingEligible: false,
+		weight: 5,
+		method: "Apply migrations to ephemeral Postgres with representative synthetic rows, record schema/data diff, then replay.",
+		standards: ["NIST-SSDF-PW.8"]
+	},
+	{
+		id: "PAY-001",
+		version: "1.0.0",
+		title: "Webhook verifies Stripe signature against raw body",
+		category: "payments",
+		priority: "P0",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Static control-flow proof plus locally signed valid/invalid payloads. Stripe requires the raw body.",
+		standards: ["OWASP-ASVS-13.2.5", "OWASP-API-2"]
+	},
+	{
+		id: "PAY-002",
+		version: "1.0.0",
+		title: "Webhook processing is replay-safe",
+		category: "payments",
+		priority: "P0",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Deliver the same signed event twice and compare durable side effects.",
+		standards: ["OWASP-ASVS-11.1.1"]
+	},
+	{
+		id: "PAY-003",
+		version: "1.0.0",
+		title: "Price and amount are determined server-side",
+		category: "payments",
+		priority: "P0",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Trace client-controlled fields into Checkout/PaymentIntent calls and compare to server-side catalog.",
+		standards: ["OWASP-ASVS-11.1.2", "OWASP-API-6"]
+	},
+	{
+		id: "PAY-004",
+		version: "1.0.0",
+		title: "Entitlement/fulfillment follows verified payment state",
+		category: "payments",
+		priority: "P1",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Trace provisioning to a verified webhook/server retrieval, not solely a success redirect or client flag.",
+		standards: ["OWASP-ASVS-11.1.2"]
+	},
+	{
+		id: "PAY-005",
+		version: "1.0.0",
+		title: "Test/live configuration is separated",
+		category: "payments",
+		priority: "P1",
+		defaultSeverity: "critical",
+		blockingEligible: true,
+		weight: 10,
+		method: "Detect mixed test/live key prefixes, preview use of live credentials, and client exposure. Never execute a live charge.",
+		standards: ["OWASP-ASVS-14.2.1"]
+	},
+	{
+		id: "RUN-001",
+		version: "1.0.0",
+		title: "Critical routes render without 5xx or fatal console errors",
+		category: "runtime",
+		priority: "P0",
+		defaultSeverity: "high",
+		blockingEligible: true,
+		weight: 5,
+		method: "Crawl graph-discovered routes; capture status, console, page error, and Playwright trace.",
+		standards: ["WCAG-2.2-4.1.1"]
+	},
+	{
+		id: "RUN-002",
+		version: "1.0.0",
+		title: "Declared critical journey completes",
+		category: "runtime",
+		priority: "P0",
+		defaultSeverity: "high",
+		blockingEligible: true,
+		weight: 5,
+		method: "Generate a proposed flow, let user edit/approve it, then run it.",
+		standards: ["NIST-SSDF-PW.8"]
+	},
+	{
+		id: "REL-001",
+		version: "1.0.0",
+		title: "Critical UI/API handles dependency failure and timeout",
+		category: "reliability",
+		priority: "P1",
+		defaultSeverity: "high",
+		blockingEligible: false,
+		weight: 5,
+		method: "Route selected dependencies to controlled failure fixtures; assert bounded timeout and recoverable UI.",
+		standards: ["NIST-SSDF-PW.8"]
+	},
+	{
+		id: "A11Y-001",
+		version: "1.0.0",
+		title: "No critical/serious automated accessibility violation on critical pages",
+		category: "accessibility",
+		priority: "P1",
+		defaultSeverity: "medium",
+		blockingEligible: false,
+		weight: 2,
+		method: "axe-core plus form-label and keyboard-smoke assertions; map to WCAG 2.2. Never claim full conformance.",
+		standards: ["WCAG-2.2-1.3.1", "WCAG-2.2-4.1.2"]
+	},
+	{
+		id: "UX-001",
+		version: "1.0.0",
+		title: "Critical pages avoid blocking responsive defects",
+		category: "runtime",
+		priority: "P1",
+		defaultSeverity: "medium",
+		blockingEligible: false,
+		weight: 2,
+		method: "Test 320, 375, 768, and 1280 px widths for overflow, hidden primary action, clipped dialog, unusable form.",
+		standards: ["WCAG-2.2-1.4.10"]
+	},
+	{
+		id: "OPS-001",
+		version: "1.0.0",
+		title: "Minimum launch observability is present",
+		category: "operations",
+		priority: "P1",
+		defaultSeverity: "medium",
+		blockingEligible: false,
+		weight: 2,
+		method: "Detect structured server error logging, error capture integration, and a usable health signal.",
+		standards: ["NIST-SSDF-RV.1"]
+	}
+];
+var CHECK_BY_ID = Object.fromEntries(CHECKS.map((c) => [c.id, c]));
+//#endregion
+export { PHASE_LABELS as a, GATE_COPY as i, CHECK_BY_ID as n, DIMENSION_LABELS as r, CHECKS as t };
